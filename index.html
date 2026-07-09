@@ -23,6 +23,10 @@
       <input id="searchInput" type="text" placeholder="Search tracks, artists, moods…">
     </div>
     <div class="topbar-right">
+      <button class="queue-toggle" id="settingsToggle" style="margin-right: 8px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 005 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        Settings
+      </button>
       <button class="queue-toggle" id="queueToggle">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="14" y2="12"/><line x1="4" y1="18" x2="10" y2="18"/></svg>
         Queue
@@ -138,6 +142,25 @@
 
 <div class="video-container" id="videoContainer">
   <div id="ytPlayer"></div>
+</div>
+
+<!-- SETTINGS MODAL -->
+<div class="settings-modal" id="settingsModal">
+  <div class="settings-content glass">
+    <div class="settings-head">
+      <h3>Player Settings</h3>
+      <button id="closeSettings" style="background:none; border:none; color:inherit;">&times;</button>
+    </div>
+    <div class="settings-body">
+      <div class="settings-group">
+        <label for="ytApiKey">YouTube API Key (Optional)</label>
+        <input type="password" id="ytApiKey" placeholder="Paste your Google API Key here...">
+        <p class="settings-help">Unlocks <strong>full-length song streaming</strong> when hosted on static sites like GitHub Pages. Leave blank to use the default 30-second preview mode.</p>
+        <p class="settings-help"><a href="https://developers.google.com/youtube/v3/getting-started" target="_blank" style="color:var(--amber); text-decoration:underline;">How to get a free YouTube API key ➜</a></p>
+      </div>
+      <button class="settings-save-btn" id="saveSettingsBtn">Save Settings</button>
+    </div>
+  </div>
 </div>
 
 <script src="script.js" defer></script>

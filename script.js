@@ -550,13 +550,39 @@ function loadAndPlay(){
 
   renderMain();
   renderQueue();
-
+  
   // 2. Fetch full-length song in background and swap engine seamlessly
   const searchRequestNum = ++currentSearchRequestNum;
   const searchQuery = `${t.title} ${t.artist} official audio`;
   
-  fetch(`/api/youtube-search?q=${encodeURIComponent(searchQuery)}`)
-    .then(res => res.json())
+  let fetchPromise;
+  const savedKey = localStorage.getItem('rewind_yt_api_key') || '';
+  
+  if (savedKey) {
+    const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(searchQuery)}&type=video&key=${savedKey}&maxResults=1`;
+    fetchPromise = fetch(url)
+      .then(res => {
+        if (!res.ok) throw new Error("YouTube API Error");
+        return res.json();
+      })
+      .then(data => {
+        if (data && data.items && data.items.length > 0) {
+          return { videoId: data.items[0].id.videoId };
+        }
+        return { videoId: null };
+      });
+  } else {
+    fetchPromise = fetch(`/api/youtube-search?q=${encodeURIComponent(searchQuery)}`)
+      .then(res => {
+        if (res.status === 404) {
+          throw new Error("static_mode_404");
+        }
+        if (!res.ok) throw new Error("Local Search API Error");
+        return res.json();
+      });
+  }
+  
+  fetchPromise
     .then(data => {
       // Ensure the user hasn't changed or skipped the track in the meantime
       if (searchRequestNum !== currentSearchRequestNum) return;
@@ -579,7 +605,13 @@ function loadAndPlay(){
       }
     })
     .catch(err => {
-      console.warn("YouTube lookup failed, continuing with iTunes preview:", err);
+      if (searchRequestNum !== currentSearchRequestNum) return;
+      if (err.message === "static_mode_404") {
+        console.log("GitHub Pages mode detected. Previews enabled. Add a key in settings to unlock full streaming.");
+        toast("Static Mode: Enter YouTube API Key in settings to play full songs.");
+      } else {
+        console.warn("YouTube lookup failed, continuing with iTunes preview:", err);
+      }
     });
 }
 
@@ -1081,6 +1113,42 @@ async function initApp() {
     renderMain();
     renderQueue();
   }
+}
+
+// Settings modal interactions
+const settingsToggle = document.getElementById('settingsToggle');
+const settingsModal = document.getElementById('settingsModal');
+const closeSettings = document.getElementById('closeSettings');
+const saveSettingsBtn = document.getElementById('saveSettingsBtn');
+const ytApiKeyInput = document.getElementById('ytApiKey');
+
+if (settingsToggle && settingsModal) {
+  settingsToggle.addEventListener('click', () => {
+    ytApiKeyInput.value = localStorage.getItem('rewind_yt_api_key') || '';
+    settingsModal.classList.add('open');
+  });
+}
+
+if (closeSettings && settingsModal) {
+  closeSettings.addEventListener('click', () => {
+    settingsModal.classList.remove('open');
+  });
+  
+  // Close settings when clicking outside modal contents
+  settingsModal.addEventListener('click', (e) => {
+    if (e.target === settingsModal) {
+      settingsModal.classList.remove('open');
+    }
+  });
+}
+
+if (saveSettingsBtn && ytApiKeyInput && settingsModal) {
+  saveSettingsBtn.addEventListener('click', () => {
+    const key = ytApiKeyInput.value.trim();
+    localStorage.setItem('rewind_yt_api_key', key);
+    toast(key ? "YouTube API Key saved successfully!" : "YouTube API Key cleared.");
+    settingsModal.classList.remove('open');
+  });
 }
 
 // Kickstart execution

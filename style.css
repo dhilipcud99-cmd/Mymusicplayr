@@ -578,3 +578,96 @@
   #videoToggleBtn.active {
     color: var(--amber);
   }
+
+  /* ===== SETTINGS MODAL ===== */
+  .settings-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    z-index: 150;
+    display: none;
+    align-items: center;
+    justify-content: center;
+  }
+  .settings-modal.open {
+    display: flex;
+  }
+  .settings-content {
+    width: 100%;
+    max-width: 400px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 22px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+  }
+  .settings-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .settings-head h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 0.03em;
+  }
+  .settings-head button {
+    font-size: 24px;
+    color: var(--muted);
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color 0.15s;
+  }
+  .settings-head button:hover {
+    color: var(--text);
+  }
+  .settings-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 22px;
+  }
+  .settings-group label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .settings-group input {
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 10px 12px;
+    color: var(--text);
+    font-size: 13px;
+    transition: border-color 0.15s;
+  }
+  .settings-group input:focus {
+    outline: none;
+    border-color: var(--amber);
+  }
+  .settings-help {
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.4;
+    margin-top: 4px;
+  }
+  .settings-save-btn {
+    width: 100%;
+    background: var(--amber);
+    color: #12141a;
+    padding: 11px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 13.5px;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.15s, background-color 0.15s;
+    box-shadow: 0 4px 15px rgba(232, 163, 61, 0.2);
+  }
+  .settings-save-btn:hover {
+    transform: scale(1.02);
+    background: #f0b55c;
+  }
