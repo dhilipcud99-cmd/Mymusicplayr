@@ -48,7 +48,8 @@ const state = {
   isLoading: false,
   buffering: false,
   preMuteVolume: 0.7,
-  playlists: []        // custom playlists
+  playlists: [],        // custom playlists
+  youtubeVideoId: null  // requested YouTube video ID
 };
 
 // Internal local database loaded from API
@@ -1069,6 +1070,7 @@ function loadAndPlay(){
         audio.pause();
         
         currentEngine = 'youtube';
+        state.youtubeVideoId = data.videoId;
         ytPlayer.loadVideoById(data.videoId, startSeconds);
         
         // Sync volume/mute
@@ -1331,6 +1333,80 @@ function onPlayerError(e) {
   }
 }
 
+/* ===================== YOUTUBE AD SILENCER & SKIPPER ===================== */
+let adMuted = false;
+
+function showAdOverlay(show) {
+  let overlay = document.getElementById('adBlockOverlay');
+  if (show) {
+    if (!overlay) {
+      overlay = document.createElement('div');
+      overlay.id = 'adBlockOverlay';
+      overlay.innerHTML = `
+        <div style="background: rgba(26,29,38,0.95); border: 1px solid var(--line); border-radius: 8px; padding: 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); backdrop-filter: blur(8px); max-width: 260px;">
+          <div class="spinner" style="margin: 0 auto 12px; width: 28px; height: 28px;"></div>
+          <div class="eyebrow" style="color: var(--amber); font-weight: bold; font-size: 11px; letter-spacing: 0.15em;">REWIND SHIELD</div>
+          <div style="font-size: 14px; font-weight: 600; margin-top: 6px; color: var(--text);">Ad Auto-Muted & Skipping...</div>
+        </div>
+      `;
+      overlay.style.position = 'absolute';
+      overlay.style.inset = '0';
+      overlay.style.display = 'flex';
+      overlay.style.alignItems = 'center';
+      overlay.style.justifyContent = 'center';
+      overlay.style.zIndex = '100';
+      overlay.style.background = 'rgba(18,20,26,0.7)';
+      
+      const container = document.getElementById('videoContainer');
+      if (container) container.appendChild(overlay);
+    }
+  } else {
+    if (overlay) overlay.remove();
+  }
+}
+
+function handleYoutubeAds() {
+  if (currentEngine !== 'youtube' || !ytPlayerReady || !ytPlayer || !ytPlayer.getVideoData) return;
+  
+  const videoData = ytPlayer.getVideoData();
+  if (!videoData) return;
+  
+  const currentId = videoData.video_id;
+  const targetId = state.youtubeVideoId;
+  
+  const isAd = (currentId && targetId && currentId !== targetId) || 
+               (videoData.title && (videoData.title.toLowerCase().includes('advertisement') || videoData.title.toLowerCase().startsWith('ad ')));
+               
+  if (isAd) {
+    if (!adMuted) {
+      console.log("YouTube Ad detected! Auto-muting...");
+      ytPlayer.mute();
+      adMuted = true;
+      toast("Ad playing (auto-muted)...");
+      showAdOverlay(true);
+    }
+    
+    // Attempt auto-skip by seeking to the end of the ad
+    const adDuration = ytPlayer.getDuration();
+    const adCurrentTime = ytPlayer.getCurrentTime();
+    if (adDuration && isFinite(adDuration) && adCurrentTime < adDuration - 0.5) {
+      ytPlayer.seekTo(adDuration - 0.2, true);
+    }
+  } else {
+    // Restore normal volume when the ad concludes
+    if (adMuted) {
+      console.log("Ad finished! Restoring volume...");
+      if (!audio.muted && audio.volume > 0) {
+        ytPlayer.unMute();
+        ytPlayer.setVolume(audio.volume * 100);
+      }
+      adMuted = false;
+      showAdOverlay(false);
+      toast("Playback restored.");
+    }
+  }
+}
+
 /* ===================== SYSTEM & DOM EVENTS ===================== */
 document.getElementById('playBtn').addEventListener('click', togglePlay);
 document.getElementById('nextBtn').addEventListener('click', ()=>playNext(false));
@@ -1427,6 +1503,7 @@ setInterval(() => {
       document.getElementById('curTime').textContent = fmtTime(cur);
       document.getElementById('durTime').textContent = fmtTime(dur);
       updateLyricsSync(cur);
+      handleYoutubeAds();
     }
   }
 }, 250);
