@@ -1433,6 +1433,26 @@ function handleYoutubeAds() {
 }
 
 /* ===================== SYSTEM & DOM EVENTS ===================== */
+const logoBtn = document.getElementById('logoBtn');
+if (logoBtn) {
+  logoBtn.addEventListener('click', () => {
+    state.view = 'discover';
+    state.genreFilter = 'all';
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) searchInput.value = '';
+    state.searchTerm = '';
+    state.searchResults = [];
+    if (typeof searchTimeout !== 'undefined') clearTimeout(searchTimeout);
+    
+    document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+    const discoverNavItem = document.querySelector('[data-view="discover"]');
+    if (discoverNavItem) discoverNavItem.classList.add('active');
+    
+    renderMain();
+    toast("Navigated to Discover");
+  });
+}
+
 document.getElementById('playBtn').addEventListener('click', togglePlay);
 document.getElementById('nextBtn').addEventListener('click', ()=>playNext(false));
 document.getElementById('prevBtn').addEventListener('click', playPrev);

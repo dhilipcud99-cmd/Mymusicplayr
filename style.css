@@ -251,7 +251,10 @@
     letter-spacing:.04em;
     color:var(--text);
     flex-shrink:0;
+    cursor:pointer;
+    transition:opacity .12s;
   }
+  .logo:hover{opacity:.85;}
   .logo .reels{
     display:flex;
     gap:3px;
