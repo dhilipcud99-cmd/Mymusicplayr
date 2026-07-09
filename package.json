@@ -1,0 +1,11 @@
+{
+  "name": "rewind-music-player",
+  "version": "1.0.0",
+  "description": "REWIND — a working browser music player with playback, queue, search, liked songs, and history.",
+  "private": true,
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": ["music-player", "html", "css", "javascript"],
+  "license": "MIT"
+}

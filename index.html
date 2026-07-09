@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>REWIND — Late Night Radio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="logo">
+      <span class="reels"><span class="reel"></span><span class="reel"></span></span>
+      REWIND
+    </div>
+    <div class="searchbar">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input id="searchInput" type="text" placeholder="Search tracks, artists, moods…">
+    </div>
+    <div class="topbar-right">
+      <button class="queue-toggle" id="queueToggle">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="14" y2="12"/><line x1="4" y1="18" x2="10" y2="18"/></svg>
+        Queue
+      </button>
+      <span id="clock" class="eyebrow"></span>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="nav-group">
+      <h4>Browse</h4>
+      <a class="nav-item active" data-nav="discover"><span class="left">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+        Discover</span></a>
+      <a class="nav-item" data-nav="charts"><span class="left">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        Top Charts</span></a>
+      <a class="nav-item" data-nav="radio"><span class="left">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 010 8.49M7.76 16.24a6 6 0 010-8.49M19.07 4.93a10 10 0 010 14.14M4.93 19.07a10 10 0 010-14.14"/></svg>
+        Radio</span></a>
+    </div>
+    <div class="nav-group">
+      <h4>Library</h4>
+      <a class="nav-item" data-nav="liked"><span class="left">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 10-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 000-7.8z"/></svg>
+        Liked Songs</span><span class="count" id="likedCount">0</span></a>
+      <a class="nav-item" data-nav="history"><span class="left">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+        History</span></a>
+    </div>
+    <div class="nav-group">
+      <h4>Genres</h4>
+      <div style="padding:0 6px;">
+        <span class="genre-pill active" data-genre="all">All</span>
+        <span class="genre-pill" data-genre="Lo-fi">Lo-fi</span>
+        <span class="genre-pill" data-genre="Synth">Synth</span>
+        <span class="genre-pill" data-genre="Folk">Folk</span>
+        <span class="genre-pill" data-genre="Indie">Indie</span>
+        <span class="genre-pill" data-genre="Ambient">Ambient</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main" id="mainContent"></div>
+
+  <!-- PLAYER BAR -->
+  <div class="player">
+    <div class="now-playing">
+      <div class="np-cover" id="npCover"><div class="disc"><span class="initials" id="npInitials">—</span></div></div>
+      <div class="np-meta">
+        <div class="np-title" id="npTitle">Nothing playing</div>
+        <div class="np-artist" id="npArtist">Pick a track to start</div>
+      </div>
+      <button class="np-like" id="npLike">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 10-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 000-7.8z"/></svg>
+      </button>
+    </div>
+
+    <div class="controls">
+      <div class="control-btns">
+        <button class="ctl-icon" id="shuffleBtn" title="Shuffle">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>
+        </button>
+        <button class="ctl-icon" id="prevBtn" title="Previous">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="19 20 9 12 19 4 19 20"/><rect x="5" y="4" width="2" height="16"/></svg>
+        </button>
+        <button class="play-main" id="playBtn" title="Play/Pause">
+          <svg id="playIcon" width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg>
+        </button>
+        <button class="ctl-icon" id="nextBtn" title="Next">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 4 15 12 5 20 5 4"/><rect x="17" y="4" width="2" height="16"/></svg>
+        </button>
+        <button class="ctl-icon" id="repeatBtn" title="Repeat">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
+        </button>
+      </div>
+      <div class="seek-row">
+        <span class="time" id="curTime">0:00</span>
+        <input type="range" class="seek" id="seekBar" min="0" max="100" value="0">
+        <span class="time" id="durTime">0:00</span>
+      </div>
+    </div>
+
+    <div class="right-controls">
+      <div class="vol-row">
+        <button id="videoToggleBtn" class="ctl-icon" title="Toggle Video Screen" style="display: flex; align-items: center; justify-content: center; margin-right: 8px;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/></svg>
+        </button>
+        <button id="muteBtn" class="ctl-icon" title="Mute/Unmute" style="display: flex; align-items: center; justify-content: center;">
+          <svg id="volIcon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.5 8.5a5 5 0 010 7"/></svg>
+        </button>
+        <input type="range" class="seek" id="volBar" min="0" max="100" value="70">
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- QUEUE PANEL -->
+<div class="queue-panel" id="queuePanel">
+  <div class="queue-head">
+    <span class="eyebrow">Up next</span>
+    <h3>Queue</h3>
+  </div>
+  <div class="queue-list" id="queueList"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<audio id="audio" preload="metadata"></audio>
+
+<div class="video-container" id="videoContainer">
+  <div id="ytPlayer"></div>
+</div>
+
+<script src="script.js" defer></script>
+</body>
+</html>
