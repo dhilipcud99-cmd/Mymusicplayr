@@ -806,6 +806,7 @@ function handleSearchInput(e) {
 /* ===================== YOUTUBE PLAYER INTERFACES ===================== */
 window.onYouTubeIframeAPIReady = function() {
   ytPlayer = new YT.Player('ytPlayer', {
+    host: 'https://www.youtube-nocookie.com',
     height: '100%',
     width: '100%',
     videoId: '',
