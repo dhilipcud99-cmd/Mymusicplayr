@@ -60,13 +60,22 @@
     </div>
     <div class="nav-group">
       <h4>Genres</h4>
-      <div style="padding:0 6px;">
+      <div style="padding:0 6px; margin-bottom: 8px;">
         <span class="genre-pill active" data-genre="all">All</span>
         <span class="genre-pill" data-genre="Lo-fi">Lo-fi</span>
         <span class="genre-pill" data-genre="Synth">Synth</span>
         <span class="genre-pill" data-genre="Folk">Folk</span>
         <span class="genre-pill" data-genre="Indie">Indie</span>
         <span class="genre-pill" data-genre="Ambient">Ambient</span>
+      </div>
+    </div>
+    <div class="nav-group" style="border-top: 1px solid var(--line); padding-top: 12px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; padding:0 6px;">
+        <h4 style="margin:0;">Playlists</h4>
+        <button id="createPlaylistBtn" title="Create Playlist" style="color:var(--amber); font-size:16px; font-weight:bold; cursor:pointer;">+</button>
+      </div>
+      <div class="playlists-nav" id="playlistsNav" style="max-height: 150px; overflow-y: auto; display:flex; flex-direction:column; gap:4px; padding:0 4px;">
+        <!-- Playlists will render here dynamically -->
       </div>
     </div>
   </div>
@@ -114,6 +123,9 @@
 
     <div class="right-controls">
       <div class="vol-row">
+        <button id="lyricsToggleBtn" class="ctl-icon" title="Toggle Lyrics Screen" style="display: flex; align-items: center; justify-content: center; margin-right: 8px;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M3 20h9M3 12h18M3 4h18"/></svg>
+        </button>
         <button id="videoToggleBtn" class="ctl-icon" title="Toggle Video Screen" style="display: flex; align-items: center; justify-content: center; margin-right: 8px;">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/></svg>
         </button>
@@ -134,6 +146,17 @@
     <h3>Queue</h3>
   </div>
   <div class="queue-list" id="queueList"></div>
+</div>
+
+<!-- ARTIST SPOTLIGHT DRAWER -->
+<div class="artist-drawer" id="artistDrawer">
+  <div class="artist-drawer-head">
+    <span class="eyebrow">Artist Spotlight</span>
+    <button id="closeArtistDrawer" style="font-size:24px; color:var(--muted);">&times;</button>
+  </div>
+  <div class="artist-drawer-body" id="artistDrawerBody">
+    <!-- Dynamic Profile details will load here -->
+  </div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -158,8 +181,41 @@
         <p class="settings-help">Unlocks <strong>full-length song streaming</strong> when hosted on static sites like GitHub Pages. (Pasted key overrides default configuration).</p>
         <p class="settings-help"><a href="https://developers.google.com/youtube/v3/getting-started" target="_blank" style="color:var(--amber); text-decoration:underline;">How to get a free YouTube API key ➜</a></p>
       </div>
-      <button class="settings-save-btn" id="saveSettingsBtn">Save Settings</button>
+      <div class="settings-group" style="margin-top: 18px;">
+        <label>Theme Accent Color</label>
+        <div class="theme-options">
+          <button type="button" class="theme-circle" data-theme="amber" title="Amber Gold" style="background:#e8a33d;"></button>
+          <button type="button" class="theme-circle" data-theme="green" title="Spotify Green" style="background:#1db954;"></button>
+          <button type="button" class="theme-circle" data-theme="pink" title="Cyberpunk Pink" style="background:#ff2a5f;"></button>
+          <button type="button" class="theme-circle" data-theme="blue" title="Midnight Blue" style="background:#3d7ae8;"></button>
+          <button type="button" class="theme-circle" data-theme="mint" title="Mint Ice" style="background:#3dd6a3;"></button>
+        </div>
+      </div>
+      <button class="settings-save-btn" id="saveSettingsBtn" style="margin-top: 12px;">Save Settings</button>
     </div>
+  </div>
+</div>
+
+<!-- GLOBAL OPTIONS DROPDOWN -->
+<div class="options-dropdown" id="optionsDropdown">
+  <div class="dropdown-item" id="optAddToQueue">Add to Queue</div>
+  <div class="dropdown-item parent">
+    Add to Playlist
+    <div class="submenu" id="optPlaylistSubmenu">
+      <!-- Custom Playlists will render here dynamically -->
+    </div>
+  </div>
+  <div class="dropdown-item" id="optRemoveFromPlaylist" style="display:none; color:var(--tape-red);">Remove from Playlist</div>
+</div>
+
+<!-- LYRICS OVERLAY PANEL -->
+<div class="lyrics-panel" id="lyricsPanel">
+  <div class="lyrics-head">
+    <h3 style="font-family:'Bebas Neue', sans-serif; font-size:24px; letter-spacing:0.03em;">Synced Lyrics</h3>
+    <button id="closeLyricsPanel" style="font-size:24px; color:var(--muted); background:none; border:none; cursor:pointer;">&times;</button>
+  </div>
+  <div class="lyrics-body" id="lyricsBody">
+    <!-- Synced scrolling lyrics will load here -->
   </div>
 </div>
 
