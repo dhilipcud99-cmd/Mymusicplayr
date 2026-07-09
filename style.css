@@ -1169,3 +1169,325 @@
     transform: scale(1.06);
     text-shadow: 0 0 15px var(--amber-dim);
   }
+
+  /* ===== FULLSCREEN PLAYER OVERLAY ===== */
+  .fs-player {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(100%);
+    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease, visibility 0.45s;
+    color: var(--text);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .fs-player.open {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .fs-bg {
+    position: absolute;
+    inset: -30px;
+    background-size: cover;
+    background-position: center;
+    filter: blur(60px) brightness(0.25) saturate(1.2);
+    opacity: 0.85;
+    z-index: 1;
+    transition: background-image 0.6s ease;
+  }
+  .fs-overlay-layer {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, rgba(18, 20, 26, 0.15) 0%, rgba(10, 12, 18, 0.85) 100%), rgba(18, 20, 26, 0.4);
+    z-index: 2;
+  }
+  .fs-container {
+    position: relative;
+    z-index: 3;
+    height: 100%;
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-rows: 64px 1fr auto;
+    padding: 24px 30px;
+    box-sizing: border-box;
+  }
+  .fs-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 12px;
+  }
+  .fs-close-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--muted);
+    transition: background 0.2s, color 0.2s, transform 0.2s;
+    cursor: pointer;
+  }
+  .fs-close-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: var(--text);
+    transform: translateY(2px);
+  }
+  .fs-header-title {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--muted);
+  }
+  .fs-menu-btn {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  .fs-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 60px;
+    padding: 30px 0;
+    overflow: hidden;
+    height: 100%;
+  }
+  .fs-visual-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: 440px;
+    text-align: center;
+  }
+  .fs-cover-wrapper {
+    width: 330px;
+    height: 330px;
+    margin-bottom: 28px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .fs-cover {
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.65);
+    position: relative;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.3s ease, border-radius 0.5s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--surface-2);
+  }
+  .fs-cover.spinning {
+    animation: spin 10s linear infinite;
+    border-radius: 50%;
+    box-shadow: 0 0 35px rgba(232, 163, 61, 0.3);
+  }
+  .fs-cover .fs-cover-disc {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .fs-cover .fs-cover-initials {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 80px;
+    color: rgba(255, 255, 255, 0.95);
+    letter-spacing: 0.03em;
+    z-index: 2;
+  }
+  .fs-meta {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .fs-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0;
+    color: var(--text);
+  }
+  .fs-artist {
+    font-size: 16px;
+    color: var(--muted);
+    transition: color 0.15s;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .fs-artist:hover {
+    color: var(--amber);
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  .fs-lyrics-section {
+    flex: 1.2;
+    height: 100%;
+    max-height: 480px;
+    display: flex;
+    flex-direction: column;
+    background: rgba(26, 29, 38, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
+    padding: 24px;
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+  }
+  .fs-lyrics-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 10px;
+    margin-bottom: 16px;
+  }
+  .fs-lyrics-body {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    scroll-behavior: smooth;
+    mask-image: linear-gradient(to bottom, transparent 0%, white 12%, white 88%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, white 12%, white 88%, transparent 100%);
+    padding-right: 8px;
+  }
+  .fs-lyrics-body .lyric-line {
+    font-size: 20px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.25);
+    line-height: 1.45;
+    transition: color 0.25s, transform 0.25s;
+    cursor: pointer;
+    transform-origin: left center;
+  }
+  .fs-lyrics-body .lyric-line:hover {
+    color: rgba(255, 255, 255, 0.7);
+  }
+  .fs-lyrics-body .lyric-line.active {
+    color: var(--amber);
+    transform: scale(1.05);
+    text-shadow: 0 0 15px var(--amber-dim);
+  }
+  .fs-controls-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    max-width: 680px;
+    margin: 0 auto;
+    padding-bottom: 10px;
+  }
+  .fs-seek-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+  }
+  .fs-time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    width: 40px;
+    text-align: center;
+  }
+  .fs-playback-row {
+    display: flex;
+    align-items: center;
+    gap: 36px;
+  }
+  .fs-extra-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding-top: 16px;
+    margin-top: 4px;
+  }
+  .fs-vol-col {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  /* Mobile Adjustments */
+  @media (max-width: 768px) {
+    .fs-container {
+      grid-template-rows: 56px 1fr auto;
+      padding: 16px 20px 24px;
+    }
+    .fs-body {
+      flex-direction: column;
+      gap: 0;
+      padding: 15px 0 25px;
+      justify-content: center;
+    }
+    .fs-visual-section {
+      max-width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .fs-cover-wrapper {
+      width: 250px;
+      height: 250px;
+      margin-bottom: 24px;
+    }
+    .fs-title {
+      font-size: 23px;
+      max-width: 290px;
+    }
+    .fs-artist {
+      font-size: 14.5px;
+    }
+    
+    .fs-lyrics-section {
+      display: none;
+      width: 100%;
+      height: 100%;
+      max-height: 310px;
+      background: none;
+      border: none;
+      padding: 0;
+      backdrop-filter: none;
+    }
+    
+    /* Toggle states for Mobile Lyrics view */
+    .fs-body.show-lyrics-mobile .fs-visual-section {
+      display: none;
+    }
+    .fs-body.show-lyrics-mobile .fs-lyrics-section {
+      display: flex;
+    }
+    
+    .fs-playback-row {
+      gap: 22px;
+    }
+    .fs-controls-section {
+      gap: 15px;
+    }
+  }
