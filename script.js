@@ -988,11 +988,8 @@ function loadAndPlay(){
   
   // Link to full song on Apple Music
   const npTitle = document.getElementById('npTitle');
-  if (t.trackViewUrl) {
-    npTitle.innerHTML = `<a href="${t.trackViewUrl}" target="_blank" title="Listen full song on Apple Music" style="color:var(--amber); text-decoration: underline; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:block;">${t.title}</a>`;
-  } else {
-    npTitle.textContent = t.title;
-    npTitle.style.textDecoration = 'none';
+  if (npTitle) {
+    npTitle.innerHTML = `<a href="${t.trackViewUrl || '#'}" target="_blank" title="Listen full song on Apple Music" style="color:var(--amber); text-decoration: underline; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:block;">${t.title} <span style="font-size: 9px; color: var(--amber); font-weight: normal; margin-left: 6px; border: 1px solid var(--amber-dim); border-radius: 4px; padding: 1px 4px; text-transform: uppercase; font-family: 'JetBrains Mono', monospace; display: inline-block; vertical-align: middle;">Connecting HQ...</span></a>`;
   }
   
   document.getElementById('npArtist').textContent = `${t.artist} · ${t.album}`;
@@ -1060,9 +1057,9 @@ function loadAndPlay(){
   
   fetchPromise
     .then(data => {
-      // Ensure the user hasn't changed or skipped the track in the meantime
       if (searchRequestNum !== currentSearchRequestNum) return;
       
+      const npTitle = document.getElementById('npTitle');
       if (data && data.videoId && ytPlayerReady && ytPlayer && ytPlayer.loadVideoById) {
         console.log(`Swapping to YouTube full-length stream video ID: ${data.videoId}`);
         
@@ -1079,10 +1076,24 @@ function loadAndPlay(){
         
         ytPlayer.playVideo();
         updatePlayButtonUI();
+        
+        if (npTitle) {
+          npTitle.innerHTML = `<a href="${t.trackViewUrl || '#'}" target="_blank" title="Listen full song on Apple Music" style="color:var(--amber); text-decoration: underline; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:block;">${t.title} <span style="font-size: 9px; color: var(--muted); font-weight: normal; margin-left: 6px; border: 1px solid var(--line); border-radius: 4px; padding: 1px 4px; text-transform: uppercase; font-family: 'JetBrains Mono', monospace; display: inline-block; vertical-align: middle;">HQ Stream</span></a>`;
+        }
+      } else {
+        if (npTitle) {
+          npTitle.innerHTML = `<a href="${t.trackViewUrl || '#'}" target="_blank" title="Listen full song on Apple Music" style="color:var(--amber); text-decoration: underline; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:block;">${t.title} <span style="font-size: 9px; color: var(--tape-red); font-weight: normal; margin-left: 6px; border: 1px solid var(--tape-red); border-radius: 4px; padding: 1px 4px; text-transform: uppercase; font-family: 'JetBrains Mono', monospace; display: inline-block; vertical-align: middle;">30s Preview</span></a>`;
+        }
       }
     })
     .catch(err => {
       if (searchRequestNum !== currentSearchRequestNum) return;
+      
+      const npTitle = document.getElementById('npTitle');
+      if (npTitle) {
+        npTitle.innerHTML = `<a href="${t.trackViewUrl || '#'}" target="_blank" title="Listen full song on Apple Music" style="color:var(--amber); text-decoration: underline; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:block;">${t.title} <span style="font-size: 9px; color: var(--tape-red); font-weight: normal; margin-left: 6px; border: 1px solid var(--tape-red); border-radius: 4px; padding: 1px 4px; text-transform: uppercase; font-family: 'JetBrains Mono', monospace; display: inline-block; vertical-align: middle;">30s Preview</span></a>`;
+      }
+
       if (err.message === "static_mode_404") {
         console.log("GitHub Pages mode detected. Previews enabled. Add a key in settings to unlock full streaming.");
         toast("Static Mode: Enter YouTube API Key in settings to play full songs.");
@@ -1113,6 +1124,20 @@ function updatePlayButtonUI() {
       npCover.classList.toggle('spinning', playing);
     }
   }
+  updateDocumentTitle();
+}
+
+function updateDocumentTitle() {
+  const cur = state.queue[state.queueIndex];
+  if (!cur) {
+    document.title = "REWIND — Late Night Radio";
+    return;
+  }
+  const playing = (currentEngine === 'youtube' && ytPlayerReady && ytPlayer && ytPlayer.getPlayerState)
+    ? (ytPlayer.getPlayerState() === 1 || ytPlayer.getPlayerState() === 3)
+    : !audio.paused;
+  
+  document.title = `${playing ? '▶' : '⏸'} ${cur.title} · ${cur.artist} | REWIND`;
 }
 
 function togglePlay(){

@@ -123,6 +123,7 @@
     color:var(--text);
     font-size:12.5px;
     transition:border-color .15s, color .15s;
+    cursor:pointer;
   }
   .queue-toggle:hover{border-color:var(--amber-dim); color:var(--amber);}
   .queue-toggle.active{border-color:var(--amber); color:var(--amber); background:rgba(232,163,61,.08);}
@@ -153,6 +154,7 @@
     font-size:14px;
     color:var(--muted);
     transition:background .12s, color .12s;
+    cursor:pointer;
   }
   .nav-item .left{display:flex; align-items:center; gap:11px;}
   .nav-item svg{opacity:.85; flex-shrink:0;}
@@ -177,6 +179,7 @@
     color:var(--muted);
     border:1px solid var(--line);
     transition:.12s;
+    cursor:pointer;
   }
   .genre-pill:hover, .genre-pill.active{
     color:var(--amber); border-color:var(--amber-dim); background:rgba(232,163,61,.06);
@@ -216,6 +219,7 @@
     padding:12px;
     transition:transform .15s, border-color .15s;
     position:relative;
+    cursor:pointer;
   }
   .card:hover{transform:translateY(-3px); border-color:var(--muted-2);}
   .cover{
@@ -282,6 +286,7 @@
     padding:9px 10px;
     border-radius:8px;
     transition:background .12s;
+    cursor:pointer;
   }
   .row-item:hover{background:var(--surface);}
   .row-item.playing{background:var(--surface-2);}
@@ -346,7 +351,7 @@
 
   .controls{display:flex; flex-direction:column; align-items:center; gap:8px; width:100%;}
   .control-btns{display:flex; align-items:center; gap:18px;}
-  .ctl-icon{color:var(--muted); transition:color .12s, transform .12s; display: flex; align-items: center; justify-content: center;}
+  .ctl-icon{color:var(--muted); transition:color .12s, transform .12s; display: flex; align-items: center; justify-content: center; cursor:pointer;}
   .ctl-icon:hover{color:var(--text);}
   .ctl-icon.active{color:var(--amber);}
   .play-main{
