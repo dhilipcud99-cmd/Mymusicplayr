@@ -81,8 +81,18 @@
     width:16px; height:16px;
     border-radius:50%;
     border:2px solid var(--amber);
-    border-top-color:transparent;
-    animation:spin 2.2s linear infinite;
+    position: relative;
+  }
+  .logo .reel::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 4px;
+    height: 4px;
+    background: var(--amber);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
   }
   @keyframes spin{ to{ transform:rotate(360deg);} }
 
