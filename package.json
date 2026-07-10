@@ -6,6 +6,16 @@
   "scripts": {
     "start": "node server.js"
   },
-  "keywords": ["music-player", "html", "css", "javascript"],
-  "license": "MIT"
+  "keywords": [
+    "music-player",
+    "html",
+    "css",
+    "javascript"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@capacitor/android": "^8.4.1",
+    "@capacitor/cli": "^8.4.1",
+    "@capacitor/core": "^8.4.1"
+  }
 }

@@ -74,7 +74,7 @@ const server = http.createServer(async (req, res) => {
   }
   
   // Serve static files
-  let filePath = path.join(__dirname, urlObj.pathname === '/' ? 'index.html' : urlObj.pathname);
+  let filePath = path.join(__dirname, 'www', urlObj.pathname === '/' ? 'index.html' : urlObj.pathname);
   const ext = path.extname(filePath);
   let contentType = MIME_TYPES[ext] || 'application/octet-stream';
   

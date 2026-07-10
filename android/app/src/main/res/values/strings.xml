@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Rewind Music Player</string>
+    <string name="title_activity_main">Rewind Music Player</string>
+    <string name="package_name">com.rewind.musicplayer</string>
+    <string name="custom_url_scheme">com.rewind.musicplayer</string>
+</resources>
